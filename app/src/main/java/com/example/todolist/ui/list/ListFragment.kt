@@ -1,4 +1,4 @@
-package com.example.todolist.ui.home
+package com.example.todolist.ui.list
 
 import android.os.Bundle
 import android.util.Log
@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import com.example.todolist.R
+import com.example.todolist.TaskAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class HomeFragment : Fragment() {
+class ListFragment : Fragment() {
+    private lateinit var mTaskAdapter: TaskAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +23,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =inflater.inflate(R.layout.fragment_home, container, false)
+        val view =inflater.inflate(R.layout.fragment_list, container, false)
         return view
     }
 
@@ -31,7 +33,7 @@ class HomeFragment : Fragment() {
 
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
-            Log.d("TAG","hello")
+            Log.d("TAG","hello!")
 //            val intent = Intent(this@ListActivity, InputActivity::class.java)
 //            intent.putExtra(EXTRA_TASK_ID, mTaskAdapter.getMaxId())
 //            startActivity(intent)
