@@ -42,11 +42,11 @@ class TaskAdapter(fragment: ListFragment) : BaseAdapter() {
     }
 
     // IDの最大値を取得
-//    fun getMaxId(): Int {
-//        if (taskList.size > 0) {
-//            return taskList.maxBy { it.id }!!.id
-//        } else {
-//            return -1
-//        }
-//    }
+    fun getMaxId(): Int {
+        return if (taskList.size > 0) {
+            taskList.maxOf { it.id }
+        } else {
+            -1
+        }
+    }
 }
