@@ -5,23 +5,22 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.example.todolist.R
 import com.example.todolist.Task
 import com.example.todolist.ui.list.EXTRA_TASK
 import com.example.todolist.ui.list.EXTRA_TASK_ID
 import com.google.firebase.firestore.FirebaseFirestore
-import org.w3c.dom.Text
-import java.text.SimpleDateFormat
-import java.time.ZoneId
 import java.util.*
-
 
 class InputFragment : Fragment() {
     private var taskId = 0
@@ -48,6 +47,14 @@ class InputFragment : Fragment() {
 
         datePickerDialog.show()
     }
+
+    private val mOnFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+            if (!hasFocus) {
+                /* 入力欄からフォーカスが外れたタイミングでキーボードを閉じる */
+                val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
 
     private val mOnDoneClickListener = View.OnClickListener {
         if (addTask(it)) {
@@ -80,6 +87,17 @@ class InputFragment : Fragment() {
         // 日付ボタン
         val dateButton = view.findViewById<ImageButton>(R.id.dateButton)
         dateButton.setOnClickListener(mOnDateClickListener)
+
+        // キーボード
+        view.setOnTouchListener { v, event ->
+            if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                /* Fragmentのレイアウトがタッチされた時に、Fragment全体ににフォーカスを移す */
+                view.requestFocus()
+            }
+            v?.onTouchEvent(event) ?: true
+        }
+        titleEditText.setOnFocusChangeListener(mOnFocusChangeListener)
+        contentEditText.setOnFocusChangeListener(mOnFocusChangeListener)
 
         // 遷移元のフラグメントから値を受け取る
         val taskBundle = arguments
