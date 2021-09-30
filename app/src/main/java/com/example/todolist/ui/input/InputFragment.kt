@@ -19,6 +19,7 @@ import com.example.todolist.R
 import com.example.todolist.Task
 import com.example.todolist.ui.list.EXTRA_TASK
 import com.example.todolist.ui.list.EXTRA_TASK_ID
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
@@ -142,15 +143,18 @@ class InputFragment : Fragment() {
         val db = FirebaseFirestore.getInstance()
         val task = Task(taskId, titleEditText.text.toString(), contentEditText.text.toString(), date)
 
-        db.collection("tasks")
-            .document("uid" + taskId.toString()) // TODO uidをログインUIDとする
-            .set(task)
-            .addOnSuccessListener{
-                Log.d("TAG","success")
-            }
-            .addOnFailureListener{ e ->
-                Log.d("TAG",e.toString())
-            }
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.let {
+            db.collection("tasks")
+                .document(it.uid + taskId.toString())
+                .set(task)
+                .addOnSuccessListener {
+                    Log.d("TAG", "success")
+                }
+                .addOnFailureListener { e ->
+                    Log.d("TAG", e.toString())
+                }
+        }
         return true
     }
 

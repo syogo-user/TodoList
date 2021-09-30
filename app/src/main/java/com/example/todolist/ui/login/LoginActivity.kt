@@ -1,8 +1,8 @@
 package com.example.todolist.ui.login
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -11,10 +11,14 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.todolist.R
+import com.example.todolist.ui.account.CreateAccountActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+
+const val EXTRA_EMAIL = "com.example.todolist.email"
+const val EXTRA_PASSWORD = "com.example.todolist.password"
 
 class LoginActivity: AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
@@ -25,6 +29,7 @@ class LoginActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val loginButton = findViewById<Button>(R.id.loginButton)
+        val createAccountButton = findViewById<Button>(R.id.createAccountButton)
         progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.visibility = View.GONE
 
@@ -46,10 +51,9 @@ class LoginActivity: AppCompatActivity() {
             // 閉じる
             finish()
         }
+
         loginButton.setOnClickListener { v ->
-            // キーボードを閉じる
-            val im = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            im.hideSoftInputFromWindow(v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            dismissKeyboard(v)
             val email = findViewById<EditText>(R.id.editTextTextEmail).text.toString()
             val password = findViewById<EditText>(R.id.editTextTextPassword).text.toString()
 
@@ -60,6 +64,16 @@ class LoginActivity: AppCompatActivity() {
                 lengthCheck(password, 6) -> Snackbar.make(v, "パスワードは6桁以上で入力してください", Snackbar.LENGTH_LONG).show()
                 else -> login(email, password)
             }
+        }
+
+        createAccountButton.setOnClickListener{ v ->
+            val email = findViewById<EditText>(R.id.editTextTextEmail).text.toString()
+            val password = findViewById<EditText>(R.id.editTextTextPassword).text.toString()
+            // アカウント作成画面へ遷移
+            val createAccountIntent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
+//            createAccountIntent.putExtra(EXTRA_EMAIL, email)
+//            createAccountIntent.putExtra(EXTRA_PASSWORD, password)
+            startActivity(createAccountIntent)
         }
     }
 
@@ -72,6 +86,12 @@ class LoginActivity: AppCompatActivity() {
     /* 桁数チェック minLength桁以下の場合エラー：true */
     private fun lengthCheck(password: String, minLength: Int): Boolean {
         return password.length < minLength
+    }
+
+    /* キーボードを閉じる */
+    private fun dismissKeyboard (view: View) {
+        val im = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        im.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
 }

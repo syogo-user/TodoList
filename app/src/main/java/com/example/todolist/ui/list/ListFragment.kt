@@ -114,6 +114,7 @@ class ListFragment : Fragment() {
     private fun reloadListView() {
         // データを取得し、日付順にソート
         val db = FirebaseFirestore.getInstance()
+        // TODO uidごとでフィルターする
         val tasks = db.collection("tasks")
         tasks.get()
             .addOnSuccessListener { documents ->
