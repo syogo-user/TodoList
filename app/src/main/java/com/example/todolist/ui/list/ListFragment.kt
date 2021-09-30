@@ -1,6 +1,7 @@
 package com.example.todolist.ui.list
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +13,9 @@ import com.example.todolist.R
 import com.example.todolist.Task
 import com.example.todolist.TaskAdapter
 import com.example.todolist.ui.input.InputFragment
+import com.example.todolist.ui.login.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 const val EXTRA_TASK = "com.example.todolist.TASK"
@@ -24,6 +27,9 @@ class ListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // TODO
+        FirebaseAuth.getInstance().signOut()
+        Log.d("TAG1","onCreate")
     }
 
     override fun onCreateView(
@@ -32,16 +38,17 @@ class ListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view =inflater.inflate(R.layout.fragment_list, container, false)
+        Log.d("TAG1","onCreateView")
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("TAG1","onViewCreated")
         listView = view.findViewById<ListView>(R.id.listView)
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         mTaskAdapter = TaskAdapter( this@ListFragment)
         fab.setOnClickListener {
-            Log.d("TAG","hello!")
             val manager = parentFragmentManager
             val transaction = manager.beginTransaction()
             val inputFragment = InputFragment()
@@ -86,8 +93,22 @@ class ListFragment : Fragment() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
-        // TODO ログインの確認後にリストを描画
-        reloadListView()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d("TAG1","onStart")
+
+        // ログイン済みか確認
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            // ログインしていない場合はログイン画面に遷移
+            val loginIntent = Intent(context, LoginActivity::class.java)
+            startActivity(loginIntent)
+        } else {
+            // リストを描画
+            reloadListView()
+        }
     }
 
     private fun reloadListView() {
