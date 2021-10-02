@@ -27,9 +27,6 @@ class ListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // TODO
-//        FirebaseAuth.getInstance().signOut()
-        Log.d("TAG1","onCreate")
     }
 
     override fun onCreateView(
@@ -45,7 +42,7 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("TAG1","onViewCreated")
-        listView = view.findViewById<ListView>(R.id.listView)
+        listView = view.findViewById<ListView>(R.id.listView1)
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         mTaskAdapter = TaskAdapter( this@ListFragment)
         fab.setOnClickListener {
@@ -114,40 +111,47 @@ class ListFragment : Fragment() {
     private fun reloadListView() {
         // データを取得し、日付順にソート
         val db = FirebaseFirestore.getInstance()
-        // TODO uidごとでフィルターする
-        val tasks = db.collection("tasks")
-        tasks.get()
-            .addOnSuccessListener { documents ->
-                val taskList = documents.toObjects(Task::class.java)
-                mTaskAdapter.taskList = taskList
-                // ListViewのアダプターに設定する
-                listView.adapter = mTaskAdapter
-                // アダプターにデータの変更を通知する
-                mTaskAdapter.notifyDataSetChanged()
-                for (document in documents) {
-                    Log.d("TAG", "${document.id} => ${document.data}")
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        uid?.let{
+            val tasks = db.collection("tasks").whereEqualTo("uid", it)
+            tasks.get()
+                .addOnSuccessListener { documents ->
+                    val taskList = documents.toObjects(Task::class.java)
+                    mTaskAdapter.taskList = taskList
+                    // ListViewのアダプターに設定する
+                    listView.adapter = mTaskAdapter
+                    // アダプターにデータの変更を通知する
+                    mTaskAdapter.notifyDataSetChanged()
+                    for (document in documents) {
+                        Log.d("TAG", "${document.id} => ${document.data}")
+                    }
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("TAG", "Error getting documents: ", exception)
-            }
+                .addOnFailureListener { exception ->
+                    Log.w("TAG", "Error getting documents: ", exception)
+                }
+        }
+
     }
 
     private fun deleteTask(id: Int) {
         // タスクの削除
         val db = FirebaseFirestore.getInstance()
-        // TODO
-        val ref = db.collection("tasks").document("uid" + id.toString())
-        ref.delete()
-            .addOnSuccessListener {
-                Log.d("TAG","DeleteSuccess")
-            }
-            .addOnFailureListener{
-                Log.d("TAG","DeleteFailure")
-            }
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        uid?.let {
+            val ref = db.collection("tasks").document(uid + id.toString())
+            ref.delete()
+                .addOnSuccessListener {
+                    Log.d("TAG","DeleteSuccess")
+                }
+                .addOnFailureListener{
+                    Log.d("TAG","DeleteFailure")
+                }
+        }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
     }
+
 }

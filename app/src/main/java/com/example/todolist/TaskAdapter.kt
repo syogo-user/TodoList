@@ -5,11 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.todolist.ui.list.ListFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TaskAdapter(fragment: ListFragment) : BaseAdapter() {
+class TaskAdapter(fragment: Fragment) : BaseAdapter() {
     private val mLayoutInflater: LayoutInflater
     var taskList = mutableListOf<Task>()
 

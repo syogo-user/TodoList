@@ -19,6 +19,8 @@ import com.example.todolist.R
 import com.example.todolist.Task
 import com.example.todolist.ui.list.EXTRA_TASK
 import com.example.todolist.ui.list.EXTRA_TASK_ID
+import com.example.todolist.ui.list.ListFragment
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
@@ -134,22 +136,25 @@ class InputFragment : Fragment() {
 
     private fun addTask(view: View): Boolean {
         if (emptyCheck(titleEditText.text.toString(), contentEditText.text.toString())) {
-//            Snackbar.make(view, "タイトルとコンテンツは必須入力です", Snackbar.LENGTH_LONG).show()
-//            Snackbar.make(view, "", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(view, "タイトルとコンテンツは必須入力です", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(view, "", Snackbar.LENGTH_LONG).show()
             return false
         }
-        val calendar = GregorianCalendar(mYear, mMonth, mDay)
-        var date = calendar.time
-        val db = FirebaseFirestore.getInstance()
-        val task = Task(taskId, titleEditText.text.toString(), contentEditText.text.toString(), date)
-
-        val user = FirebaseAuth.getInstance().currentUser
-        user?.let {
-            db.collection("tasks")
-                .document(it.uid + taskId.toString())
-                .set(task)
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        uid?.let{
+            val calendar = GregorianCalendar(mYear, mMonth, mDay)
+            var date = calendar.time
+            val db = FirebaseFirestore.getInstance()
+            val task = Task(taskId, titleEditText.text.toString(), contentEditText.text.toString(), date, it)
+            db.collection("tasks").document(it + taskId.toString()).set(task)
                 .addOnSuccessListener {
                     Log.d("TAG", "success")
+                    // リストの表示
+                    val manager = parentFragmentManager
+                    val transaction = manager.beginTransaction()
+                    transaction.replace(R.id.nav_host_fragment_activity_main, ListFragment())
+                    transaction.addToBackStack(null)
+                    transaction.commit()
                 }
                 .addOnFailureListener { e ->
                     Log.d("TAG", e.toString())
