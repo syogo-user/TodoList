@@ -12,11 +12,13 @@ import androidx.fragment.app.Fragment
 import com.example.todolist.R
 import com.example.todolist.Task
 import com.example.todolist.TaskAdapter
+import com.example.todolist.ui.calendar.EXTRA_TASK_DATESTR
 import com.example.todolist.ui.input.InputFragment
 import com.example.todolist.ui.login.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
 
 const val EXTRA_TASK = "com.example.todolist.TASK"
 const val EXTRA_TASK_ID = "com.example.todolist.TASKID"
@@ -74,7 +76,7 @@ class ListFragment : Fragment() {
             true
         }
 
-        listView.setOnItemClickListener { parent, view, position, id ->
+        listView.setOnItemClickListener { parent, _, position, id ->
             // listViewをタップ時
             val task = parent.adapter.getItem(position) as Task
             val manager = parentFragmentManager
@@ -112,19 +114,31 @@ class ListFragment : Fragment() {
         // データを取得し、日付順にソート
         val db = FirebaseFirestore.getInstance()
         val uid = FirebaseAuth.getInstance().currentUser?.uid
+
+        // 遷移元のフラグメントから値を受け取る
+        val taskBundle = this.arguments
+        var filterDay = ""
+        if (taskBundle != null) filterDay  = taskBundle.getString(EXTRA_TASK_DATESTR, "")
         uid?.let{
+            // uidがnullではない
             val tasks = db.collection("tasks").whereEqualTo("uid", it)
             tasks.get()
                 .addOnSuccessListener { documents ->
-                    val taskList = documents.toObjects(Task::class.java)
+                    var taskList = documents.toObjects(Task::class.java)
+                    if (filterDay.isNotEmpty()) {
+                        // 日付が設定されている場合はカレンダー画面からの遷移のため、タスクを日付で絞る
+                        taskList = taskList.filter {
+                            val calendar = Calendar.getInstance()
+                            calendar.time = it.date
+                            val date = calendar.get(Calendar.YEAR).toString() + (calendar.get(Calendar.MONTH) + 1).toString()  + calendar.get(Calendar.DAY_OF_MONTH).toString()
+                            date == filterDay
+                        }
+                    }
                     mTaskAdapter.taskList = taskList
                     // ListViewのアダプターに設定する
                     listView.adapter = mTaskAdapter
                     // アダプターにデータの変更を通知する
                     mTaskAdapter.notifyDataSetChanged()
-                    for (document in documents) {
-                        Log.d("TAG", "${document.id} => ${document.data}")
-                    }
                 }
                 .addOnFailureListener { exception ->
                     Log.w("TAG", "Error getting documents: ", exception)

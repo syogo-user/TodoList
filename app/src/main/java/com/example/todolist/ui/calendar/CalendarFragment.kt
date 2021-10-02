@@ -1,5 +1,6 @@
 package com.example.todolist.ui.calendar
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -14,13 +15,21 @@ import com.applandeo.materialcalendarview.EventDay
 import com.example.todolist.R
 import com.example.todolist.Task
 import com.example.todolist.TaskAdapter
+import com.example.todolist.ui.input.InputFragment
+import com.example.todolist.ui.list.EXTRA_TASK
+import com.example.todolist.ui.list.EXTRA_TASK_ID
+import com.example.todolist.ui.list.ListFragment
+import com.google.android.gms.common.internal.constants.ListAppsActivityContract
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
+const val EXTRA_TASK_DATESTR = "com.example.todolist.TASK_DATESTR"
+
 class CalendarFragment : Fragment() {
     private lateinit var mTaskAdapter: TaskAdapter
     private lateinit var calendarListView: ListView
+    private lateinit var calendarView: CalendarView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,22 +46,36 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val calendarView = view.findViewById<CalendarView>(R.id.calendarView)
+        calendarView = view.findViewById<CalendarView>(R.id.calendarView)
         calendarListView = view.findViewById<ListView>(R.id.calendarListView)
         mTaskAdapter = TaskAdapter( this@CalendarFragment)
         reloadListView()
 
-        // カレンダーにタスクのマークを設定
-        val events = ArrayList<EventDay>();
-        val calendar = Calendar.getInstance() //
-        events.add(EventDay(calendar , R.drawable.bluestar))
-        calendarView.setEvents(events)
-
         calendarView.setOnDayClickListener { eventDay ->
             val nowCalendar = eventDay.calendar
-            val date = nowCalendar.get(Calendar.YEAR).toString() + "/"+ (nowCalendar.get(Calendar.MONTH) + 1).toString() + "/" + nowCalendar.get(Calendar.DAY_OF_MONTH).toString()
-            Toast.makeText(this.context, date,Toast.LENGTH_SHORT).show()
+            val dateStr = nowCalendar.get(Calendar.YEAR).toString() + (nowCalendar.get(Calendar.MONTH) + 1).toString()  + nowCalendar.get(Calendar.DAY_OF_MONTH).toString()
+            // Listを呼ぶ
+            val manager = parentFragmentManager
+            val transaction = manager.beginTransaction()
+            val listFragment = ListFragment()
+            val bundle = Bundle()
+            bundle.putString(EXTRA_TASK_DATESTR,dateStr)
+            listFragment.arguments = bundle
+            transaction.replace(R.id.nav_host_fragment_activity_main, listFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
+    }
+
+    private fun layoutStar(taskList: MutableList<Task>) {
+        // カレンダーにタスクのマークを設定
+        val events = ArrayList<EventDay>();
+        taskList.forEach { task ->
+            val event = Calendar.getInstance()
+            event.time = task.date
+            events.add(EventDay(event, R.drawable.bluestar))
+        }
+        calendarView.setEvents(events)
     }
 
     private fun reloadListView() {
@@ -69,6 +92,8 @@ class CalendarFragment : Fragment() {
                     calendarListView.adapter = mTaskAdapter
                     // アダプターにデータの変更を通知する
                     mTaskAdapter.notifyDataSetChanged()
+                    // 星の表示
+                    layoutStar(mTaskAdapter.taskList)
                 }
                 .addOnFailureListener { exception ->
                     Log.w("TAG", "Error getting documents: ", exception)
