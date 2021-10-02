@@ -28,7 +28,7 @@ class ListFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // TODO
-        FirebaseAuth.getInstance().signOut()
+//        FirebaseAuth.getInstance().signOut()
         Log.d("TAG1","onCreate")
     }
 

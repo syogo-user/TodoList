@@ -29,7 +29,7 @@ class LoginActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val loginButton = findViewById<Button>(R.id.loginButton)
-        val createAccountButton = findViewById<Button>(R.id.createAccountButton)
+        val createAccountButton = findViewById<Button>(R.id.createAccountButtonTrans)
         progressBar = findViewById<ProgressBar>(R.id.progressBar)
         progressBar.visibility = View.GONE
 
@@ -40,6 +40,7 @@ class LoginActivity: AppCompatActivity() {
             if (task.isSuccessful) {
                 // 成功
                 Log.d("TAG","ログイン成功")
+
             } else {
                 // 失敗
                 val view = findViewById<View>(android.R.id.content)
@@ -47,7 +48,6 @@ class LoginActivity: AppCompatActivity() {
             }
             // プログレスバー非表示
             progressBar.visibility = View.GONE
-
             // 閉じる
             finish()
         }
@@ -76,7 +76,7 @@ class LoginActivity: AppCompatActivity() {
             startActivity(createAccountIntent)
         }
     }
-
+    /* ログイン処理 */
     private fun login(email: String, password: String) {
         progressBar.visibility = View.VISIBLE
         // ログイン
