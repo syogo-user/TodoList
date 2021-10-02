@@ -12,12 +12,6 @@
         tools:layout="@layout/fragment_list" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.todolist.ui.input.InputFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_input" />
-
-    <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.todolist.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
