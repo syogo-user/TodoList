@@ -109,7 +109,7 @@ class InputFragment : Fragment() {
         // 値の設定
         if (mTask === null ){
             // 新規
-            taskId = taskBundle!!.getInt(EXTRA_TASK_ID, -1)
+            taskId = taskBundle!!.getInt(EXTRA_TASK_ID, -1) + 1
             val calendar = Calendar.getInstance()
             mYear = calendar.get(Calendar.YEAR)
             mMonth = calendar.get(Calendar.MONTH)
