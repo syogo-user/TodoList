@@ -5,13 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import androidx.fragment.app.Fragment
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
 import com.example.todolist.R
 import com.example.todolist.Task
-import com.example.todolist.TaskAdapter
 import com.example.todolist.ui.list.ListFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,8 +18,6 @@ import java.util.*
 const val EXTRA_TASK_DATESTR = "com.example.todolist.TASK_DATESTR"
 
 class CalendarFragment : Fragment() {
-    private lateinit var mTaskAdapter: TaskAdapter
-    private lateinit var calendarListView: ListView
     private lateinit var calendarView: CalendarView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +36,6 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         calendarView = view.findViewById<CalendarView>(R.id.calendarView)
-        mTaskAdapter = TaskAdapter( this@CalendarFragment)
         reloadCalendarView()
 
         calendarView.setOnDayClickListener { eventDay ->
@@ -54,7 +49,7 @@ class CalendarFragment : Fragment() {
             bundle.putString(EXTRA_TASK_DATESTR,dateStr)
             listFragment.arguments = bundle
             transaction.replace(R.id.nav_host_fragment_activity_main, listFragment)
-            transaction.addToBackStack(null)
+            transaction.addToBackStack("CalendarFragment")
             transaction.commit()
         }
     }
@@ -71,7 +66,7 @@ class CalendarFragment : Fragment() {
     }
 
     private fun reloadCalendarView() {
-        // データを取得し、日付順にソート
+        // データを取得
         val db = FirebaseFirestore.getInstance()
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         uid?.let{
