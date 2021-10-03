@@ -13,14 +13,13 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.todolist.R
+import com.example.todolist.const.Const.Companion.EXTRA_EMAIL
+import com.example.todolist.const.Const.Companion.EXTRA_PASSWORD
 import com.example.todolist.ui.account.CreateAccountActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-
-const val EXTRA_EMAIL = "com.example.todolist.email"
-const val EXTRA_PASSWORD = "com.example.todolist.password"
 
 class LoginActivity: AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth

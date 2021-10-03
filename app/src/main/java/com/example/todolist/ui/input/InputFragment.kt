@@ -17,8 +17,8 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.example.todolist.R
 import com.example.todolist.Task
-import com.example.todolist.ui.list.EXTRA_TASK
-import com.example.todolist.ui.list.EXTRA_TASK_ID
+import com.example.todolist.const.Const.Companion.EXTRA_TASK
+import com.example.todolist.const.Const.Companion.EXTRA_TASK_ID
 import com.example.todolist.ui.list.ListFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -60,9 +60,7 @@ class InputFragment : Fragment() {
         }
 
     private val mOnDoneClickListener = View.OnClickListener {
-        if (addTask(it)) {
-//            finish()
-        }
+        addTask(it)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -171,5 +169,4 @@ class InputFragment : Fragment() {
         }
         return false
     }
-
 }

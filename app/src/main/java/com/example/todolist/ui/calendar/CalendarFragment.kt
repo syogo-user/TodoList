@@ -10,12 +10,13 @@ import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
 import com.example.todolist.R
 import com.example.todolist.Task
+import com.example.todolist.const.Const.Companion.EXTRA_TASK_DATESTR
 import com.example.todolist.ui.list.ListFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
-const val EXTRA_TASK_DATESTR = "com.example.todolist.TASK_DATESTR"
+
 
 class CalendarFragment : Fragment() {
     private lateinit var calendarView: CalendarView

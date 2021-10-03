@@ -1,7 +1,6 @@
 package com.example.todolist.ui.list
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,16 +11,14 @@ import androidx.fragment.app.Fragment
 import com.example.todolist.R
 import com.example.todolist.Task
 import com.example.todolist.TaskAdapter
-import com.example.todolist.ui.calendar.EXTRA_TASK_DATESTR
+import com.example.todolist.const.Const.Companion.EXTRA_TASK
+import com.example.todolist.const.Const.Companion.EXTRA_TASK_DATESTR
+import com.example.todolist.const.Const.Companion.EXTRA_TASK_ID
 import com.example.todolist.ui.input.InputFragment
-import com.example.todolist.ui.login.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
-
-const val EXTRA_TASK = "com.example.todolist.TASK"
-const val EXTRA_TASK_ID = "com.example.todolist.TASKID"
 
 class ListFragment : Fragment() {
     private lateinit var mTaskAdapter: TaskAdapter

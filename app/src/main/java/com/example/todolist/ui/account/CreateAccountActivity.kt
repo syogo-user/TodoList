@@ -15,8 +15,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.todolist.MainActivity
 import com.example.todolist.R
-import com.example.todolist.ui.login.EXTRA_EMAIL
-import com.example.todolist.ui.login.EXTRA_PASSWORD
+import com.example.todolist.const.Const.Companion.EXTRA_EMAIL
+import com.example.todolist.const.Const.Companion.EXTRA_PASSWORD
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
