@@ -13,7 +13,8 @@
         android:layout_marginEnd="50dp"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:hint="メールアドレス"
+        android:hint="@string/mail_hint"
+        android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,7 +28,8 @@
         android:layout_marginEnd="50dp"
         android:ems="10"
         android:inputType="textPassword"
-        android:hint="パスワード"
+        android:hint="@string/password1_hint"
+        android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextAccountEmail" />
@@ -41,7 +43,8 @@
         android:layout_marginEnd="50dp"
         android:ems="10"
         android:inputType="textPassword"
-        android:hint="パスワード(確認用)"
+        android:hint="@string/password2_hint"
+        android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextAccountPassword1" />
@@ -54,8 +57,9 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="50dp"
         android:ems="10"
-        android:hint="ユーザ名"
+        android:hint="@string/user_name_hint"
         android:inputType="textPersonName"
+        android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextAccountPassword2" />
@@ -67,7 +71,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="アカウント作成"
+        android:text="@string/create_account_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextAccountUserName" />
@@ -79,7 +83,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:text="キャンセル"
+        android:text="@string/cancel_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/createAccountButton" />
