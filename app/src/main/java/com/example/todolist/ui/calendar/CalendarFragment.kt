@@ -60,7 +60,7 @@ class CalendarFragment : Fragment() {
         taskList.forEach { task ->
             val event = Calendar.getInstance()
             event.time = task.date
-            events.add(EventDay(event, R.drawable.bluestar))
+            events.add(EventDay(event, R.drawable.orangestar))
         }
         calendarView.setEvents(events)
     }
