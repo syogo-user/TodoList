@@ -1,25 +1,18 @@
 package com.example.todolist.ui.calendar
 
-import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.applandeo.materialcalendarview.CalendarView
 import com.applandeo.materialcalendarview.EventDay
 import com.example.todolist.R
 import com.example.todolist.Task
 import com.example.todolist.TaskAdapter
-import com.example.todolist.ui.input.InputFragment
-import com.example.todolist.ui.list.EXTRA_TASK
-import com.example.todolist.ui.list.EXTRA_TASK_ID
 import com.example.todolist.ui.list.ListFragment
-import com.google.android.gms.common.internal.constants.ListAppsActivityContract
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
@@ -47,9 +40,8 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         calendarView = view.findViewById<CalendarView>(R.id.calendarView)
-        calendarListView = view.findViewById<ListView>(R.id.calendarListView)
         mTaskAdapter = TaskAdapter( this@CalendarFragment)
-        reloadListView()
+        reloadCalendarView()
 
         calendarView.setOnDayClickListener { eventDay ->
             val nowCalendar = eventDay.calendar
@@ -78,7 +70,7 @@ class CalendarFragment : Fragment() {
         calendarView.setEvents(events)
     }
 
-    private fun reloadListView() {
+    private fun reloadCalendarView() {
         // データを取得し、日付順にソート
         val db = FirebaseFirestore.getInstance()
         val uid = FirebaseAuth.getInstance().currentUser?.uid
@@ -87,13 +79,8 @@ class CalendarFragment : Fragment() {
             tasks.get()
                 .addOnSuccessListener { documents ->
                     val taskList = documents.toObjects(Task::class.java)
-                    mTaskAdapter.taskList = taskList
-                    // ListViewのアダプターに設定する
-                    calendarListView.adapter = mTaskAdapter
-                    // アダプターにデータの変更を通知する
-                    mTaskAdapter.notifyDataSetChanged()
                     // 星の表示
-                    layoutStar(mTaskAdapter.taskList)
+                    layoutStar(taskList)
                 }
                 .addOnFailureListener { exception ->
                     Log.w("TAG", "Error getting documents: ", exception)
