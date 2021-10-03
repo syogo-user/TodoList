@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -25,13 +26,6 @@ class LoginActivity: AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mLoginListener: OnCompleteListener<AuthResult>
     private lateinit var progressBar: ProgressBar
-//    private val mOnFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
-//        if (!hasFocus) {
-//            /* 入力欄からフォーカスが外れたタイミングでキーボードを閉じる */
-//            val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//            inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-//        }
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,17 +78,16 @@ class LoginActivity: AppCompatActivity() {
             createAccountIntent.putExtra(EXTRA_PASSWORD, password)
             startActivity(createAccountIntent)
         }
-
-//        // キーボード
-//        view.setOnTouchListener { v, event ->
-//            if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-//                requestFocus()
-//            }
-//            v?.onTouchEvent(event) ?: true
-//        }
-
-
     }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        // 背景タップ時にキーボードを閉じる
+        val inputMethodManager : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val focusView = currentFocus ?: return false
+        inputMethodManager.hideSoftInputFromWindow(focusView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        return false
+    }
+
     /* ログイン処理 */
     private fun login(email: String, password: String) {
         progressBar.visibility = View.VISIBLE

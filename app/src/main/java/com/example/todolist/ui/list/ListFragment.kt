@@ -97,17 +97,8 @@ class ListFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.d("TAG1","onStart")
-
-        // ログイン済みか確認
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user == null) {
-            // ログインしていない場合はログイン画面に遷移
-            val loginIntent = Intent(context, LoginActivity::class.java)
-            startActivity(loginIntent)
-        } else {
-            // リストを描画
-            reloadListView()
-        }
+        // リストを描画
+        reloadListView()
     }
 
     private fun reloadListView() {

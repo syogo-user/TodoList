@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -46,13 +47,13 @@ class CreateAccountActivity: AppCompatActivity() {
         val intent = intent
         val receiveEmail = intent.getStringExtra(EXTRA_EMAIL)
         val receivePassword = intent.getStringExtra(EXTRA_PASSWORD)
+        // テキストに反映する
         receiveEmail?.let {
             email.setText(it)
         }
         receivePassword?.let {
             password1.setText(it)
         }
-
 
         // アカウント作成リスナー
         mCreateAccountListener = OnCompleteListener {
@@ -105,6 +106,14 @@ class CreateAccountActivity: AppCompatActivity() {
             dismissKeyboard(v)
             finish()
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        // 背景タップ時にキーボードを閉じる
+        val inputMethodManager : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val focusView = currentFocus ?: return false
+        inputMethodManager.hideSoftInputFromWindow(focusView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        return false
     }
 
     /* アカウント作成処理 */

@@ -12,7 +12,9 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.todolist.databinding.ActivityMainBinding
+import com.example.todolist.ui.login.LoginActivity
 import com.example.todolist.ui.setting.SettingActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,6 +37,13 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         Log.d("TAG1","MainActivity onStart")
+        // ログイン済みか確認
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            // ログインしていない場合はログイン画面に遷移
+            val loginIntent = Intent(this, LoginActivity::class.java)
+            startActivity(loginIntent)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
