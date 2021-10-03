@@ -93,7 +93,7 @@ class InputFragment : Fragment() {
         // キーボード
         view.setOnTouchListener { v, event ->
             if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-                /* Fragmentのレイアウトがタッチされた時に、Fragment全体ににフォーカスを移す */
+                // Fragmentのレイアウトがタッチされた時に、Fragment全体ににフォーカスを移す
                 view.requestFocus()
             }
             v?.onTouchEvent(event) ?: true

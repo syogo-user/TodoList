@@ -63,9 +63,12 @@
         android:layout_height="45dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:src="@drawable/ic_home_black_24dp"
+        android:src="@drawable/calendar2"
+        android:scaleType="centerInside"
         android:visibility="visible"
+        android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/content_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/content_edit_text"
+        android:contentDescription="calendar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
