@@ -19,14 +19,15 @@ class TaskAdapter(fragment: Fragment) : BaseAdapter() {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view: View = convertView ?: mLayoutInflater.inflate(android.R.layout.simple_list_item_2, null)
-        val textView1 = view.findViewById<TextView>(android.R.id.text1)
-        val textView2 = view.findViewById<TextView>(android.R.id.text2)
-        textView1.text = taskList[position].title
-
+        val view: View = convertView ?: mLayoutInflater.inflate(R.layout.list_item, null)
+        val textViewTitle = view.findViewById<TextView>(R.id.textViewTitle)
+        val textViewContent = view.findViewById<TextView>(R.id.textViewContent)
+        val textViewDate = view.findViewById<TextView>(R.id.textViewDate)
+        textViewTitle.text = taskList[position].title
+        textViewContent.text = taskList[position].content
         var simpleDateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.JAPANESE)
         val date = taskList[position].date
-        textView2.text = simpleDateFormat.format(date)
+        textViewDate.text = simpleDateFormat.format(date)
         return view
     }
 

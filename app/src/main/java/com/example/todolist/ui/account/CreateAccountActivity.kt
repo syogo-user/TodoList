@@ -2,7 +2,6 @@ package com.example.todolist.ui.account
 
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -12,10 +11,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.IntentCompat
 import com.example.todolist.MainActivity
 import com.example.todolist.R
-import com.example.todolist.ui.login.LoginActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
@@ -77,7 +74,7 @@ class CreateAccountActivity: AppCompatActivity() {
         }
 
         createAccountButton.setOnClickListener{
-
+            dismissKeyboard(it)
             // 入力チェック
             when {
                 email.text.toString().isEmpty() -> Snackbar.make(it, "メールアドレスを入力してください", Snackbar.LENGTH_LONG).show()
