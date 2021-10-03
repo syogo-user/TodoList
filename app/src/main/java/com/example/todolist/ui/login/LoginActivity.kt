@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -61,6 +62,7 @@ class LoginActivity: AppCompatActivity() {
             when {
                 email.isEmpty() -> Snackbar.make(v, "メールアドレスを入力してください", Snackbar.LENGTH_LONG).show()
                 password.isEmpty() -> Snackbar.make(v, "パスワードを入力してください", Snackbar.LENGTH_LONG).show()
+                emailFormatCheck(email) -> Snackbar.make(v, "正しいメールアドレスを入力してください", Snackbar.LENGTH_LONG).show()
                 lengthCheck(password, 6) -> Snackbar.make(v, "パスワードは6桁以上で入力してください", Snackbar.LENGTH_LONG).show()
                 else -> login(email, password)
             }
@@ -71,8 +73,8 @@ class LoginActivity: AppCompatActivity() {
             val password = findViewById<EditText>(R.id.editTextTextPassword).text.toString()
             // アカウント作成画面へ遷移
             val createAccountIntent = Intent(this@LoginActivity, CreateAccountActivity::class.java)
-//            createAccountIntent.putExtra(EXTRA_EMAIL, email)
-//            createAccountIntent.putExtra(EXTRA_PASSWORD, password)
+            createAccountIntent.putExtra(EXTRA_EMAIL, email)
+            createAccountIntent.putExtra(EXTRA_PASSWORD, password)
             startActivity(createAccountIntent)
         }
     }
@@ -81,6 +83,11 @@ class LoginActivity: AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
         // ログイン
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(mLoginListener)
+    }
+
+    /* メールアドレス形式チェック 不正な場合：true */
+    private fun emailFormatCheck(email: String): Boolean {
+        return !(Patterns.EMAIL_ADDRESS.matcher(email).matches())
     }
 
     /* 桁数チェック minLength桁以下の場合エラー：true */

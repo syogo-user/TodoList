@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
 import android.os.Bundle
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -81,9 +82,11 @@ class CreateAccountActivity: AppCompatActivity() {
             when {
                 email.text.toString().isEmpty() -> Snackbar.make(it, "メールアドレスを入力してください", Snackbar.LENGTH_LONG).show()
                 password1.text.toString().isEmpty() -> Snackbar.make(it, "パスワードを入力してください", Snackbar.LENGTH_LONG).show()
-                password2.text.toString().isEmpty() -> Snackbar.make(it, "パスワード2を入力してください", Snackbar.LENGTH_LONG).show()
+                password2.text.toString().isEmpty() -> Snackbar.make(it, "パスワード（確認用）を入力してください", Snackbar.LENGTH_LONG).show()
                 userName.text.toString().isEmpty() -> Snackbar.make(it, "名前を入力してください", Snackbar.LENGTH_LONG).show()
+                emailFormatCheck(email.text.toString()) -> Snackbar.make(it, "正しいメールアドレスを入力してください", Snackbar.LENGTH_LONG).show()
                 lengthCheck(password1.text.toString(), 6) -> Snackbar.make(it, "パスワードは6桁以上で入力してください", Snackbar.LENGTH_LONG).show()
+                passwordEqualCheck(password1.text.toString(), password2.text.toString() ) -> Snackbar.make(it, "パスワードは２つとも同じものを入力してください", Snackbar.LENGTH_LONG).show()
                 else -> createAccount(email.text.toString(), password1.text.toString())
             }
         }
@@ -109,9 +112,19 @@ class CreateAccountActivity: AppCompatActivity() {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(mLoginListener)
     }
 
+    /* メールアドレス形式チェック 不正な場合：true */
+    private fun emailFormatCheck(email: String): Boolean {
+        return !(Patterns.EMAIL_ADDRESS.matcher(email).matches())
+    }
+
     /* 桁数チェック minLength桁以下の場合エラー：true */
     private fun lengthCheck(password: String, minLength: Int): Boolean {
         return password.length < minLength
+    }
+
+    /* パスワード一致チェック 一致しない場合：true */
+    private fun passwordEqualCheck(password1: String, password2: String): Boolean {
+        return password1 != password2
     }
 
     /* キーボードを閉じる */

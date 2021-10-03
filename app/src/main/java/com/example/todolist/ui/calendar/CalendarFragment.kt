@@ -49,7 +49,7 @@ class CalendarFragment : Fragment() {
             bundle.putString(EXTRA_TASK_DATESTR,dateStr)
             listFragment.arguments = bundle
             transaction.replace(R.id.nav_host_fragment_activity_main, listFragment)
-            transaction.addToBackStack("CalendarFragment")
+            transaction.addToBackStack(null)
             transaction.commit()
         }
     }
