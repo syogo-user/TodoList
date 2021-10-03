@@ -136,7 +136,6 @@ class InputFragment : Fragment() {
     private fun addTask(view: View): Boolean {
         if (emptyCheck(titleEditText.text.toString(), contentEditText.text.toString())) {
             Snackbar.make(view, "タイトルとコンテンツは必須入力です", Snackbar.LENGTH_LONG).show()
-            Snackbar.make(view, "", Snackbar.LENGTH_LONG).show()
             return false
         }
         val uid = FirebaseAuth.getInstance().currentUser?.uid
