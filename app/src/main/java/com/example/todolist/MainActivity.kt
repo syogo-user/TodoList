@@ -1,10 +1,13 @@
 package com.example.todolist
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -59,5 +62,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return true
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        // 背景タップ時にキーボードを閉じる
+        val inputMethodManager : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val focusView = currentFocus ?: return false
+        inputMethodManager.hideSoftInputFromWindow(focusView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        return false
     }
 }

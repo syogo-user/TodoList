@@ -51,13 +51,13 @@ class InputFragment : Fragment() {
         datePickerDialog.show()
     }
 
-    private val mOnFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
-            if (!hasFocus) {
-                /* 入力欄からフォーカスが外れたタイミングでキーボードを閉じる */
-                val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-            }
-        }
+//    private val mOnFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
+//            if (!hasFocus) {
+//                /* 入力欄からフォーカスが外れたタイミングでキーボードを閉じる */
+//                val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+//            }
+//        }
 
     private val mOnDoneClickListener = View.OnClickListener {
         addTask(it)
@@ -90,15 +90,15 @@ class InputFragment : Fragment() {
         dateButton.setOnClickListener(mOnDateClickListener)
 
         // キーボード
-        view.setOnTouchListener { v, event ->
-            if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-                // Fragmentのレイアウトがタッチされた時に、Fragment全体ににフォーカスを移す
-                view.requestFocus()
-            }
-            v?.onTouchEvent(event) ?: true
-        }
-        titleEditText.setOnFocusChangeListener(mOnFocusChangeListener)
-        contentEditText.setOnFocusChangeListener(mOnFocusChangeListener)
+//        view.setOnTouchListener { v, event ->
+//            if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+//                // Fragmentのレイアウトがタッチされた時に、Fragment全体ににフォーカスを移す
+//                view.requestFocus()
+//            }
+//            v?.onTouchEvent(event) ?: true
+//        }
+//        titleEditText.setOnFocusChangeListener(mOnFocusChangeListener)
+//        contentEditText.setOnFocusChangeListener(mOnFocusChangeListener)
 
         // 遷移元のフラグメントから値を受け取る
         val taskBundle = arguments
@@ -133,6 +133,7 @@ class InputFragment : Fragment() {
     }
 
     private fun addTask(view: View): Boolean {
+        dismissKeyboard(view)
         if (emptyCheck(titleEditText.text.toString(), contentEditText.text.toString())) {
             Snackbar.make(view, "タイトルとコンテンツは必須入力です", Snackbar.LENGTH_LONG).show()
             return false
@@ -168,5 +169,11 @@ class InputFragment : Fragment() {
             }
         }
         return false
+    }
+
+    /* キーボードを閉じる */
+    private fun dismissKeyboard (view: View) {
+        val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 }
