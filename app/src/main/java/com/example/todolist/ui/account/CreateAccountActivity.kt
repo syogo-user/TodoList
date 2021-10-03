@@ -10,9 +10,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.todolist.MainActivity
 import com.example.todolist.R
+import com.example.todolist.ui.login.EXTRA_EMAIL
+import com.example.todolist.ui.login.EXTRA_PASSWORD
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
@@ -27,7 +30,6 @@ class CreateAccountActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account)
-        Log.d("TAG1", "CreateAccountActivity onCreate")
         val createAccountButton = findViewById<Button>(R.id.createAccountButton)
         val cancelButton = findViewById<Button>(R.id.cancelButton)
         val email = findViewById<EditText>(R.id.editTextTextAccountEmail)
@@ -37,9 +39,20 @@ class CreateAccountActivity: AppCompatActivity() {
         progressBar = findViewById<ProgressBar>(R.id.progressBar2)
         // プログレスバーを非表示
         progressBar.visibility = View.GONE
-
         // FirebaseAuthのオブジェクトを取得する
         mAuth = FirebaseAuth.getInstance()
+
+        // ログイン画面からの値を受け取る
+        val intent = intent
+        val receiveEmail = intent.getStringExtra(EXTRA_EMAIL)
+        val receivePassword = intent.getStringExtra(EXTRA_PASSWORD)
+        receiveEmail?.let {
+            email.setText(it)
+        }
+        receivePassword?.let {
+            password1.setText(it)
+        }
+
 
         // アカウント作成リスナー
         mCreateAccountListener = OnCompleteListener {
