@@ -53,19 +53,15 @@ class InputFragment : Fragment() {
         addTask(it)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
         val view =inflater.inflate(R.layout.fragment_input, container, false)
-        titleEditText = view.findViewById<EditText>(R.id.title_edit_text)
-        contentEditText = view.findViewById<EditText>(R.id.content_edit_text)
-        dateTextview = view.findViewById<TextView>(R.id.dateTextView)
+        titleEditText = view.findViewById(R.id.title_edit_text)
+        contentEditText = view.findViewById(R.id.content_edit_text)
+        dateTextview = view.findViewById(R.id.dateTextView)
         return view
     }
 
@@ -114,13 +110,13 @@ class InputFragment : Fragment() {
     private fun addTask(view: View): Boolean {
         dismissKeyboard(view)
         if (emptyCheck(titleEditText.text.toString(), contentEditText.text.toString())) {
-            Snackbar.make(view, "タイトルとコンテンツは必須入力です", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(view, "タイトルと内容は必須入力です", Snackbar.LENGTH_LONG).show()
             return false
         }
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         uid?.let{
             val calendar = GregorianCalendar(mYear, mMonth, mDay)
-            var date = calendar.time
+            val date = calendar.time
             val db = FirebaseFirestore.getInstance()
             val task = Task(taskId, titleEditText.text.toString(), contentEditText.text.toString(), date, it)
             db.collection("tasks").document(it + taskId.toString()).set(task)

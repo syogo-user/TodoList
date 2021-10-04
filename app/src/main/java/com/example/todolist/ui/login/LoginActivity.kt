@@ -31,7 +31,7 @@ class LoginActivity: AppCompatActivity() {
         setContentView(R.layout.activity_login)
         val loginButton = findViewById<Button>(R.id.loginButton)
         val createAccountButton = findViewById<Button>(R.id.createAccountButtonTrans)
-        progressBar = findViewById<ProgressBar>(R.id.progressBar)
+        progressBar = findViewById(R.id.progressBar)
         progressBar.visibility = View.GONE
 
         // FirebaseAuthのオブジェクトを取得する
@@ -63,12 +63,12 @@ class LoginActivity: AppCompatActivity() {
                 email.isEmpty() -> Snackbar.make(v, "メールアドレスを入力してください", Snackbar.LENGTH_LONG).show()
                 password.isEmpty() -> Snackbar.make(v, "パスワードを入力してください", Snackbar.LENGTH_LONG).show()
                 emailFormatCheck(email) -> Snackbar.make(v, "正しいメールアドレスを入力してください", Snackbar.LENGTH_LONG).show()
-                lengthCheck(password, 6) -> Snackbar.make(v, "パスワードは6桁以上で入力してください", Snackbar.LENGTH_LONG).show()
+                lengthCheck(password) -> Snackbar.make(v, "パスワードは6桁以上で入力してください", Snackbar.LENGTH_LONG).show()
                 else -> login(email, password)
             }
         }
 
-        createAccountButton.setOnClickListener{ v ->
+        createAccountButton.setOnClickListener{ _ ->
             val email = findViewById<EditText>(R.id.editTextTextEmail).text.toString()
             val password = findViewById<EditText>(R.id.editTextTextPassword).text.toString()
             // アカウント作成画面へ遷移
@@ -99,9 +99,9 @@ class LoginActivity: AppCompatActivity() {
         return !(Patterns.EMAIL_ADDRESS.matcher(email).matches())
     }
 
-    /* 桁数チェック minLength桁以下の場合エラー：true */
-    private fun lengthCheck(password: String, minLength: Int): Boolean {
-        return password.length < minLength
+    /* 桁数チェック 6桁以下の場合エラー：true */
+    private fun lengthCheck(password: String): Boolean {
+        return password.length < 6
     }
 
     /* キーボードを閉じる */

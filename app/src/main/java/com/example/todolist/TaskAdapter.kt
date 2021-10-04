@@ -10,12 +10,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TaskAdapter(fragment: Fragment) : BaseAdapter() {
-    private val mLayoutInflater: LayoutInflater
+    private val mLayoutInflater: LayoutInflater = LayoutInflater.from(fragment.context)
     var taskList = mutableListOf<Task>()
-
-    init {
-        this.mLayoutInflater = LayoutInflater.from(fragment.context)
-    }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View = convertView ?: mLayoutInflater.inflate(R.layout.list_item, null)
@@ -24,7 +20,7 @@ class TaskAdapter(fragment: Fragment) : BaseAdapter() {
         val textViewDate = view.findViewById<TextView>(R.id.textViewDate)
         textViewTitle.text = taskList[position].title
         textViewContent.text = taskList[position].content
-        var simpleDateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.JAPANESE)
+        val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.JAPANESE)
         val date = taskList[position].date
         textViewDate.text = simpleDateFormat.format(date)
         return view

@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.todolist.MainActivity
 import com.example.todolist.R
@@ -37,7 +36,7 @@ class CreateAccountActivity: AppCompatActivity() {
         val password1 = findViewById<EditText>(R.id.editTextTextAccountPassword1)
         val password2 = findViewById<EditText>(R.id.editTextTextAccountPassword2)
         val userName = findViewById<EditText>(R.id.editTextTextAccountUserName)
-        progressBar = findViewById<ProgressBar>(R.id.progressBar2)
+        progressBar = findViewById(R.id.progressBar2)
         // プログレスバーを非表示
         progressBar.visibility = View.GONE
         // FirebaseAuthのオブジェクトを取得する
@@ -75,9 +74,9 @@ class CreateAccountActivity: AppCompatActivity() {
                 // 成功
                 Log.d("TAG","ログイン成功")
                 // MainActivityに遷移してその上にスタックしているActivityを削除する
-                val intent = Intent(this, MainActivity::class.java)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                startActivity(intent)
+                val createIntent = Intent(this, MainActivity::class.java)
+                createIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(createIntent)
             } else {
                 // 失敗
                 val view = findViewById<View>(android.R.id.content)
@@ -96,7 +95,7 @@ class CreateAccountActivity: AppCompatActivity() {
                 password2.text.toString().isEmpty() -> Snackbar.make(it, "パスワード（確認用）を入力してください", Snackbar.LENGTH_LONG).show()
                 userName.text.toString().isEmpty() -> Snackbar.make(it, "名前を入力してください", Snackbar.LENGTH_LONG).show()
                 emailFormatCheck(email.text.toString()) -> Snackbar.make(it, "正しいメールアドレスを入力してください", Snackbar.LENGTH_LONG).show()
-                lengthCheck(password1.text.toString(), 6) -> Snackbar.make(it, "パスワードは6桁以上で入力してください", Snackbar.LENGTH_LONG).show()
+                lengthCheck(password1.text.toString()) -> Snackbar.make(it, "パスワードは6桁以上で入力してください", Snackbar.LENGTH_LONG).show()
                 passwordEqualCheck(password1.text.toString(), password2.text.toString() ) -> Snackbar.make(it, "パスワードは２つとも同じものを入力してください", Snackbar.LENGTH_LONG).show()
                 else -> createAccount(email.text.toString(), password1.text.toString())
             }
@@ -136,9 +135,9 @@ class CreateAccountActivity: AppCompatActivity() {
         return !(Patterns.EMAIL_ADDRESS.matcher(email).matches())
     }
 
-    /* 桁数チェック minLength桁以下の場合エラー：true */
-    private fun lengthCheck(password: String, minLength: Int): Boolean {
-        return password.length < minLength
+    /* 桁数チェック 6桁以下の場合エラー：true */
+    private fun lengthCheck(password: String): Boolean {
+        return password.length < 6
     }
 
     /* パスワード一致チェック 一致しない場合：true */

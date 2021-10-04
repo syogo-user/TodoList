@@ -16,27 +16,20 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
-
-
 class CalendarFragment : Fragment() {
     private lateinit var calendarView: CalendarView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =inflater.inflate(R.layout.fragment_calendar, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_calendar, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        calendarView = view.findViewById<CalendarView>(R.id.calendarView)
+        calendarView = view.findViewById(R.id.calendarView)
         reloadCalendarView()
 
         calendarView.setOnDayClickListener { eventDay ->
@@ -57,7 +50,7 @@ class CalendarFragment : Fragment() {
 
     private fun layoutStar(taskList: MutableList<Task>) {
         // カレンダーにタスクのマークを設定
-        val events = ArrayList<EventDay>();
+        val events = ArrayList<EventDay>()
         taskList.forEach { task ->
             val event = Calendar.getInstance()
             event.time = task.date
