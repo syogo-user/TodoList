@@ -26,10 +26,6 @@ class ListFragment : Fragment() {
     private lateinit var listView: ListView
     private var filterDay = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,13 +38,13 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        listView = view.findViewById<ListView>(R.id.listView1)
+        listView = view.findViewById(R.id.listView1)
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         // 遷移元のフラグメントから値を受け取る
         val taskBundle = this.arguments
         if (taskBundle != null) filterDay  = taskBundle.getString(EXTRA_TASK_DATESTR, "")
         // 日付が設定されている（=カレンダーから遷移）場合fabを非活性
-        if (filterDay.isNotEmpty()){
+        if (filterDay.isNotEmpty()) {
             fab.hide()
             // タイトルを設定
             (activity as MainActivity?)!!.setActionBarTitle("Calendar($filterDay)")
@@ -67,15 +63,15 @@ class ListFragment : Fragment() {
             transaction.commit()
         }
 
-        listView.setOnItemLongClickListener { parent, view, postion, id ->
+        listView.setOnItemLongClickListener { parent, _, position, _ ->
             // listViewを長押し
             // タスク削除
-            val task = parent.adapter.getItem(postion) as Task
+            val task = parent.adapter.getItem(position) as Task
             val alert = AlertDialog.Builder(this@ListFragment.context)
             alert.setTitle("削除")
             alert.setMessage(task.title + "を削除しますか？")
             alert.setPositiveButton("OK") { _, _ ->
-                deleteTask(mTaskAdapter.taskList[postion].id)
+                deleteTask(mTaskAdapter.taskList[position].id)
                 reloadListView()
             }
             alert.setNegativeButton("CANCEL", null)
@@ -84,7 +80,7 @@ class ListFragment : Fragment() {
             true
         }
 
-        listView.setOnItemClickListener { parent, _, position, id ->
+        listView.setOnItemClickListener { parent, _, position, _ ->
             // listViewをタップ時
             if (filterDay.isEmpty()){
                 // Listタブの場合
@@ -117,9 +113,9 @@ class ListFragment : Fragment() {
         val db = FirebaseFirestore.getInstance()
         val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-        uid?.let{
+        uid?.let{ uid ->
             // uidがnullではない
-            val tasks = db.collection("tasks").whereEqualTo("uid", it)
+            val tasks = db.collection("tasks").whereEqualTo("uid", uid)
             tasks.get()
                 .addOnSuccessListener { documents ->
                     var taskList = documents.toObjects(Task::class.java)
@@ -159,10 +155,5 @@ class ListFragment : Fragment() {
                     Log.d("TAG","DeleteFailure")
                 }
         }
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 }
