@@ -19,10 +19,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
+import com.example.todolist.MainActivity
 
 class ListFragment : Fragment() {
     private lateinit var mTaskAdapter: TaskAdapter
     private lateinit var listView: ListView
+    private var filterDay = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +42,18 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("TAG1","onViewCreated")
         listView = view.findViewById<ListView>(R.id.listView1)
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
+        // 遷移元のフラグメントから値を受け取る
+        val taskBundle = this.arguments
+        if (taskBundle != null) filterDay  = taskBundle.getString(EXTRA_TASK_DATESTR, "")
+        // 日付が設定されている（=カレンダーから遷移）場合fabを非活性
+        if (filterDay.isNotEmpty()){
+            fab.hide()
+            // タイトルを設定
+            (activity as MainActivity?)!!.setActionBarTitle("Calendar($filterDay)")
+        }
+
         mTaskAdapter = TaskAdapter( this@ListFragment)
         fab.setOnClickListener {
             val manager = parentFragmentManager
@@ -75,19 +86,22 @@ class ListFragment : Fragment() {
 
         listView.setOnItemClickListener { parent, _, position, id ->
             // listViewをタップ時
-            val task = parent.adapter.getItem(position) as Task
-            val manager = parentFragmentManager
-            val transaction = manager.beginTransaction()
-            val inputFragment = InputFragment()
-            // タスクを渡ための準備
-            val bundle = Bundle()
-            bundle.putSerializable(EXTRA_TASK, task)
-            // bundleとしてタスクを渡す
-            inputFragment.arguments = bundle
-            // フラグメントを更新
-            transaction.replace(R.id.nav_host_fragment_activity_main, inputFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+            if (filterDay.isEmpty()){
+                // Listタブの場合
+                val task = parent.adapter.getItem(position) as Task
+                val manager = parentFragmentManager
+                val transaction = manager.beginTransaction()
+                val inputFragment = InputFragment()
+                // タスクを渡ための準備
+                val bundle = Bundle()
+                bundle.putSerializable(EXTRA_TASK, task)
+                // bundleとしてタスクを渡す
+                inputFragment.arguments = bundle
+                // フラグメントを更新
+                transaction.replace(R.id.nav_host_fragment_activity_main, inputFragment)
+                transaction.addToBackStack(null)
+                transaction.commit()
+            }
         }
     }
 
@@ -103,10 +117,6 @@ class ListFragment : Fragment() {
         val db = FirebaseFirestore.getInstance()
         val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-        // 遷移元のフラグメントから値を受け取る
-        val taskBundle = this.arguments
-        var filterDay = ""
-        if (taskBundle != null) filterDay  = taskBundle.getString(EXTRA_TASK_DATESTR, "")
         uid?.let{
             // uidがnullではない
             val tasks = db.collection("tasks").whereEqualTo("uid", it)
@@ -118,7 +128,7 @@ class ListFragment : Fragment() {
                         taskList = taskList.filter {
                             val calendar = Calendar.getInstance()
                             calendar.time = it.date
-                            val date = calendar.get(Calendar.YEAR).toString() + (calendar.get(Calendar.MONTH) + 1).toString()  + calendar.get(Calendar.DAY_OF_MONTH).toString()
+                            val date = calendar.get(Calendar.YEAR).toString()+ "/" + (calendar.get(Calendar.MONTH) + 1).toString() + "/" + calendar.get(Calendar.DAY_OF_MONTH).toString()
                             date == filterDay
                         }
                     }
@@ -155,5 +165,4 @@ class ListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
     }
-
 }

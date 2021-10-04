@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+
+
         Log.d("TAG1","MainActivity onStart")
         // ログイン済みか確認
         val user = FirebaseAuth.getInstance().currentUser
@@ -70,5 +72,9 @@ class MainActivity : AppCompatActivity() {
         val focusView = currentFocus ?: return false
         inputMethodManager.hideSoftInputFromWindow(focusView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
         return false
+    }
+
+    fun setActionBarTitle(title: String?) {
+        supportActionBar?.title = title
     }
 }

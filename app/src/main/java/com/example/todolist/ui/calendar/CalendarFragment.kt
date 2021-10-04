@@ -41,7 +41,7 @@ class CalendarFragment : Fragment() {
 
         calendarView.setOnDayClickListener { eventDay ->
             val nowCalendar = eventDay.calendar
-            val dateStr = nowCalendar.get(Calendar.YEAR).toString() + (nowCalendar.get(Calendar.MONTH) + 1).toString()  + nowCalendar.get(Calendar.DAY_OF_MONTH).toString()
+            val dateStr = nowCalendar.get(Calendar.YEAR).toString() + "/" + (nowCalendar.get(Calendar.MONTH) + 1).toString() + "/" + nowCalendar.get(Calendar.DAY_OF_MONTH).toString()
             // Listを呼ぶ
             val manager = parentFragmentManager
             val transaction = manager.beginTransaction()
