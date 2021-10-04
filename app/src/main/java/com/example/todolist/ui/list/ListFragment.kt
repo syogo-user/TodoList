@@ -113,9 +113,9 @@ class ListFragment : Fragment() {
         val db = FirebaseFirestore.getInstance()
         val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-        uid?.let{ uid ->
+        uid?.let{ it ->
             // uidがnullではない
-            val tasks = db.collection("tasks").whereEqualTo("uid", uid)
+            val tasks = db.collection("tasks").whereEqualTo("uid", it)
             tasks.get()
                 .addOnSuccessListener { documents ->
                     var taskList = documents.toObjects(Task::class.java)
