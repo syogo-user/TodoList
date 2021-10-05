@@ -5,7 +5,15 @@
     <string name="cancel_text">キャンセル</string>
     <string name="create_account_text">アカウント作成</string>
     <string name="user_name_hint">ユーザ名</string>
-    <string name="password2_hint">パスワード(確認用)</string>
     <string name="password1_hint">パスワード</string>
+    <string name="password2_hint">パスワード(確認用)</string>
     <string name="mail_hint">メールアドレス</string>
+    <string name="login_text">ログイン</string>
+    <string name="logout_text">ログアウト</string>
+    <string name="title_hint">タイトル</string>
+    <string name="content_hint">内容</string>
+    <string name="save_text">保存</string>
+    <string name="calendar_description">calendar</string>
+    <string name="description">TODO</string>
+    <string name="setting_title">設定</string>
 </resources>

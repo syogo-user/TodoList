@@ -16,7 +16,8 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="タイトル"
+        android:hint="@string/title_hint"
+        android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +31,8 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:hint="内容"
+        android:hint="@string/content_hint"
+        android:importantForAutofill="no"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_edit_text" />
@@ -41,7 +43,7 @@
         android:layout_height="45dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:text="保存"
+        android:text="@string/save_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content_edit_text" />
 
@@ -51,7 +53,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        android:text="TextView"
+        android:text=""
         android:padding="10dp"
         app:layout_constraintStart_toEndOf="@+id/dateButton"
         app:layout_constraintTop_toBottomOf="@+id/content_edit_text" />
@@ -68,6 +70,6 @@
         android:background="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content_edit_text"
-        android:contentDescription="calendar" />
+        android:contentDescription="@string/calendar_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
