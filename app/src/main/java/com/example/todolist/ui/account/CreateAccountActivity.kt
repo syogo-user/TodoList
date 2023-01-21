@@ -21,7 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 
-class CreateAccountActivity: AppCompatActivity() {
+class CreateAccountActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mCreateAccountListener: OnCompleteListener<AuthResult>
     private lateinit var mLoginListener: OnCompleteListener<AuthResult>
@@ -72,7 +72,7 @@ class CreateAccountActivity: AppCompatActivity() {
         mLoginListener = OnCompleteListener { task ->
             if (task.isSuccessful) {
                 // 成功
-                Log.d("TAG","ログイン成功")
+                Log.d("TAG", "ログイン成功")
                 // MainActivityに遷移してその上にスタックしているActivityを削除する
                 val createIntent = Intent(this, MainActivity::class.java)
                 createIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -80,23 +80,50 @@ class CreateAccountActivity: AppCompatActivity() {
             } else {
                 // 失敗
                 val view = findViewById<View>(android.R.id.content)
-                Snackbar.make(view,"ログインに失敗しました", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(view, "ログインに失敗しました", Snackbar.LENGTH_LONG).show()
             }
             // プログレスバー非表示
             progressBar.visibility = View.GONE
         }
 
-        createAccountButton.setOnClickListener{
+        createAccountButton.setOnClickListener {
             dismissKeyboard(it)
             // 入力チェック
             when {
-                email.text.toString().isEmpty() -> Snackbar.make(it, "メールアドレスを入力してください", Snackbar.LENGTH_LONG).show()
-                password1.text.toString().isEmpty() -> Snackbar.make(it, "パスワードを入力してください", Snackbar.LENGTH_LONG).show()
-                password2.text.toString().isEmpty() -> Snackbar.make(it, "パスワード（確認用）を入力してください", Snackbar.LENGTH_LONG).show()
-                userName.text.toString().isEmpty() -> Snackbar.make(it, "名前を入力してください", Snackbar.LENGTH_LONG).show()
-                emailFormatCheck(email.text.toString()) -> Snackbar.make(it, "正しいメールアドレスを入力してください", Snackbar.LENGTH_LONG).show()
-                lengthCheck(password1.text.toString()) -> Snackbar.make(it, "パスワードは6桁以上で入力してください", Snackbar.LENGTH_LONG).show()
-                passwordEqualCheck(password1.text.toString(), password2.text.toString() ) -> Snackbar.make(it, "パスワードは２つとも同じものを入力してください", Snackbar.LENGTH_LONG).show()
+                email.text.toString().isEmpty() -> Snackbar.make(
+                    it,
+                    "メールアドレスを入力してください",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                password1.text.toString().isEmpty() -> Snackbar.make(
+                    it,
+                    "パスワードを入力してください",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                password2.text.toString().isEmpty() -> Snackbar.make(
+                    it,
+                    "パスワード（確認用）を入力してください",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                userName.text.toString().isEmpty() -> Snackbar.make(
+                    it,
+                    "名前を入力してください",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                emailFormatCheck(email.text.toString()) -> Snackbar.make(
+                    it,
+                    "正しいメールアドレスを入力してください",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                lengthCheck(password1.text.toString()) -> Snackbar.make(
+                    it,
+                    "パスワードは6桁以上で入力してください",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                passwordEqualCheck(
+                    password1.text.toString(),
+                    password2.text.toString()
+                ) -> Snackbar.make(it, "パスワードは２つとも同じものを入力してください", Snackbar.LENGTH_LONG).show()
                 else -> createAccount(email.text.toString(), password1.text.toString())
             }
         }
@@ -109,9 +136,13 @@ class CreateAccountActivity: AppCompatActivity() {
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         // 背景タップ時にキーボードを閉じる
-        val inputMethodManager : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager: InputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val focusView = currentFocus ?: return false
-        inputMethodManager.hideSoftInputFromWindow(focusView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        inputMethodManager.hideSoftInputFromWindow(
+            focusView.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
         return false
     }
 
@@ -120,7 +151,8 @@ class CreateAccountActivity: AppCompatActivity() {
         // プログレスバーを表示
         progressBar.visibility = View.VISIBLE
         // アカウント作成
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(mCreateAccountListener)
+        mAuth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(mCreateAccountListener)
     }
 
     /* ログイン処理 */
@@ -146,7 +178,7 @@ class CreateAccountActivity: AppCompatActivity() {
     }
 
     /* キーボードを閉じる */
-    private fun dismissKeyboard (view: View) {
+    private fun dismissKeyboard(view: View) {
         val im = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         im.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }

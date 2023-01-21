@@ -34,13 +34,15 @@ class CalendarFragment : Fragment() {
 
         calendarView.setOnDayClickListener { eventDay ->
             val nowCalendar = eventDay.calendar
-            val dateStr = nowCalendar.get(Calendar.YEAR).toString() + "/" + (nowCalendar.get(Calendar.MONTH) + 1).toString() + "/" + nowCalendar.get(Calendar.DAY_OF_MONTH).toString()
+            val dateStr = nowCalendar.get(Calendar.YEAR).toString() + "/" + (nowCalendar.get(
+                Calendar.MONTH
+            ) + 1).toString() + "/" + nowCalendar.get(Calendar.DAY_OF_MONTH).toString()
             // Listを呼ぶ
             val manager = parentFragmentManager
             val transaction = manager.beginTransaction()
             val listFragment = ListFragment()
             val bundle = Bundle()
-            bundle.putString(EXTRA_TASK_DATESTR,dateStr)
+            bundle.putString(EXTRA_TASK_DATESTR, dateStr)
             listFragment.arguments = bundle
             transaction.replace(R.id.nav_host_fragment_activity_main, listFragment)
             transaction.addToBackStack(null)
@@ -63,7 +65,7 @@ class CalendarFragment : Fragment() {
         // データを取得
         val db = FirebaseFirestore.getInstance()
         val uid = FirebaseAuth.getInstance().currentUser?.uid
-        uid?.let{
+        uid?.let {
             val tasks = db.collection("tasks").whereEqualTo("uid", it)
             tasks.get()
                 .addOnSuccessListener { documents ->

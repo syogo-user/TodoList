@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.todolist.R
 import com.google.firebase.auth.FirebaseAuth
 
-class SettingActivity: AppCompatActivity(){
+class SettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,6 @@ class SettingActivity: AppCompatActivity(){
             alert.setNegativeButton("CANCEL", null)
             val dialog = alert.create()
             dialog.show()
-
         }
     }
 

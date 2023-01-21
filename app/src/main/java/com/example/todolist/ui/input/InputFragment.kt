@@ -29,12 +29,12 @@ class InputFragment : Fragment() {
     private var mMonth = 0
     private var mDay = 0
     private var mTask: Task? = null
-    private lateinit var titleEditText :EditText
-    private lateinit var contentEditText :EditText
+    private lateinit var titleEditText: EditText
+    private lateinit var contentEditText: EditText
     private lateinit var dateTextview: TextView
 
     private val mOnDateClickListener = View.OnClickListener {
-        val datePickerDialog = DatePickerDialog( this.context as Context,
+        val datePickerDialog = DatePickerDialog(this.context as Context,
             { _, year, month, dayOfMonth ->
                 mYear = year
                 mMonth = month
@@ -44,7 +44,8 @@ class InputFragment : Fragment() {
                     mMonth + 1
                 ) + "/" + String.format("%02d", mDay)
                 dateTextview.text = dateString
-            }, mYear, mMonth, mDay)
+            }, mYear, mMonth, mDay
+        )
 
         datePickerDialog.show()
     }
@@ -54,11 +55,11 @@ class InputFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
-        val view =inflater.inflate(R.layout.fragment_input, container, false)
+        val view = inflater.inflate(R.layout.fragment_input, container, false)
         titleEditText = view.findViewById(R.id.title_edit_text)
         contentEditText = view.findViewById(R.id.content_edit_text)
         dateTextview = view.findViewById(R.id.dateTextView)
@@ -78,11 +79,11 @@ class InputFragment : Fragment() {
         // 遷移元のフラグメントから値を受け取る
         val taskBundle = arguments
         if (taskBundle != null) {
-            mTask = taskBundle.getSerializable (EXTRA_TASK) as? Task
+            mTask = taskBundle.getSerializable(EXTRA_TASK) as? Task
         }
 
         // 値の設定
-        if (mTask === null ){
+        if (mTask === null) {
             // 新規
             taskId = taskBundle!!.getInt(EXTRA_TASK_ID, -1) + 1
             val calendar = Calendar.getInstance()
@@ -114,11 +115,17 @@ class InputFragment : Fragment() {
             return false
         }
         val uid = FirebaseAuth.getInstance().currentUser?.uid
-        uid?.let{
+        uid?.let {
             val calendar = GregorianCalendar(mYear, mMonth, mDay)
             val date = calendar.time
             val db = FirebaseFirestore.getInstance()
-            val task = Task(taskId, titleEditText.text.toString(), contentEditText.text.toString(), date, it)
+            val task = Task(
+                taskId,
+                titleEditText.text.toString(),
+                contentEditText.text.toString(),
+                date,
+                it
+            )
             db.collection("tasks").document(it + taskId.toString()).set(task)
                 .addOnSuccessListener {
                     Log.d("TAG", "success")
@@ -147,8 +154,9 @@ class InputFragment : Fragment() {
     }
 
     /* キーボードを閉じる */
-    private fun dismissKeyboard (view: View) {
-        val inputManager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    private fun dismissKeyboard(view: View) {
+        val inputManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 }

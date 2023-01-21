@@ -31,8 +31,8 @@ class ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view =inflater.inflate(R.layout.fragment_list, container, false)
-        Log.d("TAG1","onCreateView")
+        val view = inflater.inflate(R.layout.fragment_list, container, false)
+        Log.d("TAG1", "onCreateView")
         return view
     }
 
@@ -42,7 +42,7 @@ class ListFragment : Fragment() {
         val fab = view.findViewById<FloatingActionButton>(R.id.fab)
         // 遷移元のフラグメントから値を受け取る
         val taskBundle = this.arguments
-        if (taskBundle != null) filterDay  = taskBundle.getString(EXTRA_TASK_DATESTR, "")
+        if (taskBundle != null) filterDay = taskBundle.getString(EXTRA_TASK_DATESTR, "")
         // 日付が設定されている（=カレンダーから遷移）場合fabを非活性
         if (filterDay.isNotEmpty()) {
             fab.hide()
@@ -50,7 +50,7 @@ class ListFragment : Fragment() {
             (activity as MainActivity?)!!.setActionBarTitle("Calendar($filterDay)")
         }
 
-        mTaskAdapter = TaskAdapter( this@ListFragment)
+        mTaskAdapter = TaskAdapter(this@ListFragment)
         fab.setOnClickListener {
             val manager = parentFragmentManager
             val transaction = manager.beginTransaction()
@@ -82,7 +82,7 @@ class ListFragment : Fragment() {
 
         listView.setOnItemClickListener { parent, _, position, _ ->
             // listViewをタップ時
-            if (filterDay.isEmpty()){
+            if (filterDay.isEmpty()) {
                 // Listタブの場合
                 val task = parent.adapter.getItem(position) as Task
                 val manager = parentFragmentManager
@@ -103,7 +103,7 @@ class ListFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        Log.d("TAG1","onStart")
+        Log.d("TAG1", "onStart")
         // リストを描画
         reloadListView()
     }
@@ -113,7 +113,7 @@ class ListFragment : Fragment() {
         val db = FirebaseFirestore.getInstance()
         val uid = FirebaseAuth.getInstance().currentUser?.uid
 
-        uid?.let{ it ->
+        uid?.let { it ->
             // uidがnullではない
             val tasks = db.collection("tasks").whereEqualTo("uid", it)
             tasks.get()
@@ -124,7 +124,9 @@ class ListFragment : Fragment() {
                         taskList = taskList.filter {
                             val calendar = Calendar.getInstance()
                             calendar.time = it.date
-                            val date = calendar.get(Calendar.YEAR).toString()+ "/" + (calendar.get(Calendar.MONTH) + 1).toString() + "/" + calendar.get(Calendar.DAY_OF_MONTH).toString()
+                            val date = calendar.get(Calendar.YEAR).toString() + "/" + (calendar.get(
+                                Calendar.MONTH
+                            ) + 1).toString() + "/" + calendar.get(Calendar.DAY_OF_MONTH).toString()
                             date == filterDay
                         }
                     }
@@ -149,10 +151,10 @@ class ListFragment : Fragment() {
             val ref = db.collection("tasks").document(uid + id.toString())
             ref.delete()
                 .addOnSuccessListener {
-                    Log.d("TAG","DeleteSuccess")
+                    Log.d("TAG", "DeleteSuccess")
                 }
-                .addOnFailureListener{
-                    Log.d("TAG","DeleteFailure")
+                .addOnFailureListener {
+                    Log.d("TAG", "DeleteFailure")
                 }
         }
     }

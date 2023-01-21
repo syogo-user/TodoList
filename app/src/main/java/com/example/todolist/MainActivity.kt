@@ -25,14 +25,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("TAG1","MainActivity onCreate")
+        Log.d("TAG1", "MainActivity onCreate")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navView: BottomNavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        val appBarConfiguration = AppBarConfiguration(setOf(
-                R.id.navigation_list, R.id.navigation_calendar))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_list, R.id.navigation_calendar
+            )
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
 
 
-        Log.d("TAG1","MainActivity onStart")
+        Log.d("TAG1", "MainActivity onStart")
         // ログイン済みか確認
         val user = FirebaseAuth.getInstance().currentUser
         if (user == null) {
@@ -57,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             R.id.menuSetting -> {
                 val settingIntent = Intent(this@MainActivity, SettingActivity::class.java)
                 startActivity(settingIntent)
@@ -68,9 +71,13 @@ class MainActivity : AppCompatActivity() {
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         // 背景タップ時にキーボードを閉じる
-        val inputMethodManager : InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager: InputMethodManager =
+            getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         val focusView = currentFocus ?: return false
-        inputMethodManager.hideSoftInputFromWindow(focusView.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        inputMethodManager.hideSoftInputFromWindow(
+            focusView.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
         return false
     }
 
